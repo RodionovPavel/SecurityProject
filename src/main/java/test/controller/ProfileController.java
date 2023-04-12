@@ -1,25 +1,26 @@
 package test.controller;
 
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import test.dto.JwtResponse;
 import test.dto.LoginDto;
 import test.dto.RegisterDto;
-//import test.mapper.ProfileMapper;
 import test.model.User;
 import test.service.ProfileService;
 import test.service.UserService;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/profile")
 public class ProfileController {
-    @Autowired
-    private ProfileService profileService;
 
-    @Autowired
-    private UserService userService;
+    private final ProfileService profileService;
+
+    private final UserService userService;
 
     @PostMapping("/register")
     public void register(@RequestBody RegisterDto registerDto) {
@@ -34,7 +35,7 @@ public class ProfileController {
     }
 
     @PostMapping("/auth")
-    public String auth(@RequestBody LoginDto dto) {
-        return profileService.auth(dto.getLogin(), dto.getPassword());
+    public ResponseEntity<JwtResponse> auth(@RequestBody LoginDto dto) {
+        return ResponseEntity.ok(new JwtResponse(profileService.auth(dto.getLogin(), dto.getPassword())));
     }
 }

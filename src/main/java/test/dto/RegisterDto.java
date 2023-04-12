@@ -9,7 +9,6 @@ public class RegisterDto {
     private String password;
     private Role role;
     private String fio;
-//    @Email
     private String email;
     private String phone;
 

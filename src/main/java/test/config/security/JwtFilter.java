@@ -1,4 +1,4 @@
-package test.security;
+package test.config.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
-import test.service.ProfileService;
+import test.service.impl.ProfileServiceImpl;
 
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ public class JwtFilter extends GenericFilterBean {
     private JwtProvider jwtProvider;
 
     @Autowired
-    private ProfileService profileService;
+    private ProfileServiceImpl profileService;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
