@@ -29,10 +29,10 @@ public class UserServiceImpl implements UserService {
         if (findUser.isPresent()) {
             User updateUser = new User();
             updateUser.setId(id);
-            updateUser.setName(user.getName());
+            updateUser.setLogin(user.getLogin());
             updateUser.setPhone(user.getPhone());
             updateUser.setEmail(user.getEmail());
-            updateUser.setUserRole(user.getUserRole());
+//            updateUser.setUserRole(user.getUserRole());
         userRepository.save(updateUser);
         }
     }
