@@ -21,25 +21,20 @@ public class ProfileController {
     @Autowired
     private UserService userService;
 
-//    @Autowired
-//    private ProfileMapper profileMapper;
-
     @PostMapping("/register")
     public void register(@RequestBody RegisterDto registerDto) {
-//        User user = profileMapper.fromRegisterDto(registerDto);
         User user = new User();
         user.setPassword(registerDto.getPassword());
         user.setLogin(registerDto.getLogin());
+        user.setRole(registerDto.getRole());
+        user.setFio(registerDto.getFio());
+        user.setEmail(registerDto.getEmail());
+        user.setPhone(registerDto.getPhone());
         profileService.register(user);
     }
 
     @PostMapping("/auth")
     public String auth(@RequestBody LoginDto dto) {
         return profileService.auth(dto.getLogin(), dto.getPassword());
-    }
-
-    @GetMapping("/me")
-    public User me(@AuthenticationPrincipal User user) {
-        return (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

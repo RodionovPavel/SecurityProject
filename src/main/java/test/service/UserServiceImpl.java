@@ -1,5 +1,7 @@
 package test.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import test.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,8 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
+    private PasswordEncoder encoder;
 
     private final UserRepository userRepository;
 
@@ -30,9 +34,11 @@ public class UserServiceImpl implements UserService {
             User updateUser = new User();
             updateUser.setId(id);
             updateUser.setLogin(user.getLogin());
+            updateUser.setFio((user.getFio()));
+            updateUser.setPassword(encoder.encode(user.getPassword()));
             updateUser.setPhone(user.getPhone());
             updateUser.setEmail(user.getEmail());
-//            updateUser.setUserRole(user.getUserRole());
+            updateUser.setRole(user.getRole());
         userRepository.save(updateUser);
         }
     }

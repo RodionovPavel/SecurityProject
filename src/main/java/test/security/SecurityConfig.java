@@ -24,7 +24,6 @@ public class SecurityConfig {
                 .and()
                     .authorizeHttpRequests()
                     .requestMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
-                    .requestMatchers("/register").permitAll()
                     .requestMatchers("/**").permitAll()
                 .and()
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

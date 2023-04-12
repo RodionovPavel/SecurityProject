@@ -2,6 +2,7 @@ package test.controller;
 
 import test.dao.UserDAO;
 import test.model.User;
+import test.service.ProfileService;
 import test.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +11,6 @@ import java.util.List;
 
 @RestController
 public class UserController {
-
-//    @Autowired
-//    private UserDAO userDAO;
 
     @Autowired
     private UserService userService;
@@ -52,7 +50,7 @@ public class UserController {
         return userService.readAll();
     }
 
-    @GetMapping("/size")
+    @GetMapping("/admin/size")
     public long size() {
         return userService.size();
     }
