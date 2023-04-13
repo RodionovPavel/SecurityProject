@@ -1,21 +1,14 @@
 package test.service;
 
+import test.dto.RegisterDto;
 
-import test.model.User;
-
-import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-    void create(User user);
 
-    void update(UUID id, User user);
+    void create(RegisterDto registerDto);
 
-    User getUserById(int id);
+    void update(UUID id, RegisterDto registerDto);
 
-    void deleteById(int id);
 
-    List<User> readAll();
-
-    long size();
 }

@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users_table")
+@Table(name = "users_table4")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,10 +29,9 @@ import java.util.UUID;
 public class User implements UserDetails {
 
     @Id
-    @Column(name = "id")
     private UUID id;
 
-    @Column(unique = true)
+//    @Column(unique = true)
     private String login;
 
     private String password;
