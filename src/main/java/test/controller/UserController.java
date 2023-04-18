@@ -1,5 +1,7 @@
 package test.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,13 +26,7 @@ public class UserController {
     private final UserService userService;
     private final UserComponent userComponent;
 
-
-//    @Autowired
-//    public UserController(UserService userService, UserComponent userComponent) {
-//        this.userService = userService;
-//        this.userComponent = userComponent;
-//    }
-
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/hello")
     public String index() {
         return "Hello, world!!!";
@@ -42,16 +38,21 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}")
-    public void updateUser(@PathVariable UUID id, @RequestBody RegisterDto registerDto) {
+    public void updateUser(
+            @Parameter(description = "Идентификатор клиента", required = true)
+            @PathVariable UUID id,
+            @Parameter(description = "Новые данные пользователя", required = true)
+            @RequestBody RegisterDto registerDto) {
         userService.update(id, registerDto);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "{id}")
     public User getUserById(@PathVariable UUID id) {
         return userComponent.getUserById(id);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/admin/{id}")
+    @SecurityRequirement(name = "JWT")
     public void deleteById(@PathVariable UUID id) {
         userComponent.deleteById(id);
     }

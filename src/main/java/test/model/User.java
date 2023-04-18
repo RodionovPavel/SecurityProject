@@ -4,10 +4,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,13 +32,16 @@ public class User implements UserDetails {
     @Id
     private UUID id;
 
-//    @Column(unique = true)
+    @Column(unique = true)
+    @NotBlank
+    @Size(min=6)
     private String login;
 
     private String password;
 
     private String fio;
 
+    @Email(regexp=".*@.*\\..*", message = "Email should be valid")
     private String email;
 
     private String phone;
