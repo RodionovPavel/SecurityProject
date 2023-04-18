@@ -1,14 +1,14 @@
 package test.service;
 
-import test.dto.RegisterDto;
+import test.dto.ClientRegisterRequest;
 
 import java.util.UUID;
 
 public interface UserService {
 
-    void create(RegisterDto registerDto);
+    void create(ClientRegisterRequest registerDto);
 
-    void update(UUID id, RegisterDto registerDto);
+    void update(UUID id, ClientRegisterRequest registerDto);
 
 
 }

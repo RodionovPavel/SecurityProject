@@ -12,6 +12,10 @@ public interface UserComponent {
 
     User getUserById(UUID id);
 
+    Optional<User> findByLogin(String login);
+
+    User getByLogin(String login);
+
     Optional<User> findById(UUID id);
 
     void deleteById(UUID id);

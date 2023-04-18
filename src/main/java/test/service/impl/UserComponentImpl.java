@@ -1,5 +1,6 @@
 package test.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,18 @@ public class UserComponentImpl implements UserComponent {
     @Override
     public User getUserById(UUID id) {
         Optional<User> user = userRepository.findById(id);
-        return user.orElse(null);
+        return user.orElse(null); //WTF! ОПШИНАЛ ТАКОЙ "НК ДА НУ ДА, ПОШЁЛ Я ЛЕСОМ"
+    }
+
+    @Override
+    public Optional<User> findByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
+
+    @Override
+    public User getByLogin(String login) {
+        return userRepository.findByLogin(login)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с логином " + login + " не найден"));
     }
 
     @Override
