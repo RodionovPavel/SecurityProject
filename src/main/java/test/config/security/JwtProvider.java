@@ -1,4 +1,4 @@
-package test.security;
+package test.config.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
