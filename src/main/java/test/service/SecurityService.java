@@ -1,12 +1,12 @@
 package test.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
+import test.dto.ClientRegisterRequest;
 import test.dto.JwtResponse;
-import test.dto.RegisterDto;
 
-public interface ProfileService extends UserDetailsService {
+public interface SecurityService {
 
-    JwtResponse register(RegisterDto registerDto);
+    JwtResponse register(ClientRegisterRequest registerDto);
 
     JwtResponse auth(String login, String password);
 

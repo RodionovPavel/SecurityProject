@@ -3,7 +3,6 @@ package test.controller;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import test.dto.RegisterDto;
+import test.dto.ClientRegisterRequest;
 import test.model.User;
 import test.service.UserComponent;
 import test.service.UserService;
@@ -33,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public void create(@RequestBody RegisterDto registerDto) {
+    public void create(@RequestBody ClientRegisterRequest registerDto) {
         userService.create(registerDto);
     }
 
@@ -42,7 +41,7 @@ public class UserController {
             @Parameter(description = "Идентификатор клиента", required = true)
             @PathVariable UUID id,
             @Parameter(description = "Новые данные пользователя", required = true)
-            @RequestBody RegisterDto registerDto) {
+            @RequestBody ClientRegisterRequest registerDto) {
         userService.update(id, registerDto);
     }
 
