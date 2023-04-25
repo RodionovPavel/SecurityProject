@@ -3,20 +3,19 @@ package test.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-public class ClientOtpDto {
+public class ClientOtp {
 
-        @NotBlank
-        private String otpKey;
+        private UUID clientId;
 
-        @NotBlank
+        private String otpCode;
+
         private Integer countAttempts;
 
-        @NotBlank
         private Date createData;
 
 }

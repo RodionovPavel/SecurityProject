@@ -1,13 +1,18 @@
 package test.service;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
 import test.dto.ClientRegisterRequest;
+import test.dto.ConfirmationResponse;
 import test.dto.JwtResponse;
+import test.dto.OtpResponse;
+
+import java.util.UUID;
 
 public interface SecurityService {
 
-    JwtResponse register(ClientRegisterRequest registerDto);
+    OtpResponse register(ClientRegisterRequest registerDto);
 
     JwtResponse auth(String login, String password);
+
+    ConfirmationResponse confirm(UUID operationId, String otpCode);
 
 }
