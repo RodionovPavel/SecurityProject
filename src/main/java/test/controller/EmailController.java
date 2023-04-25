@@ -1,30 +1,28 @@
 package test.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.*;
-import test.redis.OtpService;
+import test.dto.ClientOtpRequest;
+import test.external.model.OtpAdapterImpl;
 import test.service.EmailService;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/email")
 public class EmailController {
 
-    @Autowired
-    OtpService otpService;
-    @Autowired
-    EmailService emailService;
 
-    @GetMapping(value = "/simple-email/{user-email}")
-    public @ResponseBody ResponseEntity sendSimpleEmail(@PathVariable("user-email") String email) {
-        try {
-            emailService.sendSimpleEmail(email, "Your security code", otpService.getOtpKey());
-        } catch (MailException mailException) {
-            return new ResponseEntity<>("Unable to send email", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    private final OtpAdapterImpl otpService;
 
-        return new ResponseEntity<>("Please check your inbox", HttpStatus.OK);
-    }
+    private final EmailService emailService;
+
+//    private final ClientOtpRequest clientOtpRequest;
+
+//    @GetMapping(value = "/simple-email/{user-email}")
+//    public @ResponseBody ResponseEntity sendSimpleEmail(@PathVariable("user-email") String email) {
+//        emailService.sendSimpleEmail(email, "Your security code", otpService.getOtp());
+//    }
 }
