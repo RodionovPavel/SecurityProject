@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import test.dto.ClientRegisterRequest;
-import test.dto.JwtResponse;
 import test.dto.ClientAuthRequest;
+import test.dto.ClientRegisterRequest;
+import test.dto.ConfirmationRequest;
+import test.dto.ConfirmationResponse;
+import test.dto.JwtResponse;
+import test.dto.OtpResponse;
 import test.service.SecurityService;
 
 import javax.validation.Valid;
@@ -35,9 +38,9 @@ public class SecurityController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Пользователь зарегистрирован"),
-            @ApiResponse(responseCode = "400", description = "Ошибка") })
+            @ApiResponse(responseCode = "400", description = "Ошибка")})
     @PostMapping("/register")
-    public ResponseEntity<JwtResponse> register(@Valid @RequestBody ClientRegisterRequest request) {
+    public ResponseEntity<OtpResponse> register(@Valid @RequestBody ClientRegisterRequest request) {
         log.info("Register new client with email: '{}'", request.getEmail());
         return ResponseEntity.ok(profileService.register(request));
     }
@@ -46,5 +49,11 @@ public class SecurityController {
     public ResponseEntity<JwtResponse> auth(@RequestBody ClientAuthRequest request) {
         log.info("Auth with login: '{}'", request.getLogin());
         return ResponseEntity.ok(profileService.auth(request.getLogin(), request.getPassword()));
+    }
+
+    @PostMapping("/confirm")
+    public ResponseEntity<ConfirmationResponse> confirm(@RequestBody ConfirmationRequest request) {
+        log.info("Confirmation with operationId: '{}'", request.getOperationId());
+        return ResponseEntity.ok(profileService.confirm(request.getOperationId(), request.getOtpCode()));
     }
 }

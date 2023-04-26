@@ -22,15 +22,14 @@ public class UserComponentImpl implements UserComponent {
     @Override
     public User create(User user) {
         log.info("User '{}' is created", user.getLogin());
-        user.setId(UUID.randomUUID());
         userRepository.save(user);
         return user;
     }
 
     @Override
     public User getUserById(UUID id) {
-        Optional<User> user = userRepository.findById(id);
-        return user.orElse(null); //WTF! ОПШИНАЛ ТАКОЙ "НК ДА НУ ДА, ПОШЁЛ Я ЛЕСОМ"
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с id" + id + " не найден"));
     }
 
     @Override
