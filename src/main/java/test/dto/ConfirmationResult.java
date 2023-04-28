@@ -3,16 +3,23 @@ package test.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.UUID;
 
 @Data
 @Builder
 public class ConfirmationResult {
 
-    private UUID clientId;
+    private String login;
 
     private boolean result;
 
     private String message;
+
+    private String password;
+
+    private String fullName;
+
+    private String email;
+
+    private String phone;
 
 }

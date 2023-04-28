@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import test.config.CustomRedisTemplate;
 import test.dto.ClientOtp;
+import test.dto.ClientRegisterRequest;
 import test.dto.ConfirmationResult;
 import test.dto.OtpData;
 import test.service.OtpService;
@@ -25,11 +26,12 @@ public class OtpServiceImpl implements OtpService {
     private final CustomRedisTemplate<ClientOtp> redisTemplate;
 
     @Override
-    public OtpData generate(UUID clientId) {
+    public OtpData generate(ClientRegisterRequest request) {
         var operationId = UUID.randomUUID();
         var otpCode = OtpUtils.generateOtpCode();
-        saveRedisOtp(operationId, clientId, otpCode);
-        return new OtpData(operationId, clientId, Duration.ofSeconds(DEFAULT_TTL_SECONDS).toMinutes(), otpCode);
+        var clientOtp = createData(request, otpCode);
+        saveRedisOtp(operationId, clientOtp);
+        return new OtpData(operationId, clientOtp.getLogin(), Duration.ofSeconds(DEFAULT_TTL_SECONDS).toMinutes(), otpCode);
     }
 
     @Override
@@ -52,12 +54,17 @@ public class OtpServiceImpl implements OtpService {
         }
 
         return ConfirmationResult.builder()
-                .clientId(clientOtp.getClientId())
-                .result(true).build();
+                .login(clientOtp.getLogin())
+                .result(true)
+                .email(clientOtp.getEmail())
+                .phone(clientOtp.getPhone())
+                .fullName(clientOtp.getFullName())
+                .login(clientOtp.getLogin())
+                .password(clientOtp.getPassword())
+                .build();
     }
 
-    private void saveRedisOtp(UUID operationId, UUID clientId, String otpCode) {
-        var clientOtp = new ClientOtp(clientId, otpCode, DEFAULT_COUNT_ATTEMPTS, new Date());
+    private void saveRedisOtp(UUID operationId, ClientOtp clientOtp) {
         var kay = CACHE_KEY + operationId;
         redisTemplate.opsForValue().set(kay, clientOtp);
         redisTemplate.expire(kay, Duration.ofSeconds(DEFAULT_TTL_SECONDS));
@@ -71,6 +78,19 @@ public class OtpServiceImpl implements OtpService {
     private ClientOtp getOtp(UUID operationId) {
         var kay = CACHE_KEY + operationId;
         return redisTemplate.opsForValue().get(kay);
+    }
+
+    private ClientOtp createData(ClientRegisterRequest request, String otpCode) {
+        return ClientOtp.builder()
+                .login(request.getLogin())
+                .createData(new Date())
+                .countAttempts(DEFAULT_COUNT_ATTEMPTS)
+                .email(request.getEmail())
+                .phone(request.getPhone())
+                .fullName(request.getFullName())
+                .otpCode(otpCode)
+                .password(request.getPassword())
+                .build();
     }
 
 }

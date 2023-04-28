@@ -25,7 +25,7 @@ public class EmailServiceImpl implements EmailService {
         emailSender.send(simpleMailMessage);
         } catch (MailException mailException) {
             log.error("Ошибка отправки email");
-            throw new RuntimeException("Ошибка отправки email");
+            throw new RuntimeException("Ошибка отправки email", mailException);
         }
     }
 }
