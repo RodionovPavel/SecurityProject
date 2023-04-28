@@ -11,7 +11,7 @@ public class OtpData {
 
     private UUID operationId;
 
-    private UUID clientId;
+    private String login;
 
     private long ttlMinutes;
 

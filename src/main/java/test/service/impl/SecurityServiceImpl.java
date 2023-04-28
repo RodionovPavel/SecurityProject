@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import test.config.security.JwtProvider;
 import test.dto.ClientRegisterRequest;
 import test.dto.ConfirmationResponse;
+import test.dto.ConfirmationResult;
 import test.dto.JwtResponse;
 import test.dto.OtpData;
 import test.dto.OtpResponse;
-import test.mapper.ProfileMapper;
 import test.model.User;
 import test.service.EmailService;
 import test.service.OtpService;
@@ -28,7 +28,6 @@ public class SecurityServiceImpl implements SecurityService {
 
     private final PasswordEncoder encoder;
     private final JwtProvider jwtProvider;
-    private final ProfileMapper profileMapper;
     private final UserComponent userComponent;
     private final OtpService otpService;
     private final EmailService emailService;
@@ -36,10 +35,9 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public OtpResponse register(ClientRegisterRequest request) {
         checkIsEmptyClient(request.getLogin());
-        var client = createUser(request);
-        var otpDate = otpService.generate(client.getId());
-        sendEmail(client.getEmail(), otpDate);
-        log.info("Register new client with id: '{}'", client.getId());
+        var otpDate = otpService.generate(request);
+        sendEmail(request.getEmail(), otpDate);
+        log.info("Register new client with login: '{}'", request.getLogin());
         return new OtpResponse(otpDate.getOperationId(), otpDate.getTtlMinutes());
     }
 
@@ -63,7 +61,7 @@ public class SecurityServiceImpl implements SecurityService {
                     .build();
         }
 
-        var client = userComponent.getUserById(otpResult.getClientId());
+        var client = createUser(otpResult);
         var token = jwtProvider.generateToken(client.getLogin());
 
         return ConfirmationResponse.builder()
@@ -73,10 +71,14 @@ public class SecurityServiceImpl implements SecurityService {
                 .build();
     }
 
-    private User createUser(ClientRegisterRequest request) {
-        var user = profileMapper.fromRegisterDto(request);
-        user.setPassword(encoder.encode(request.getPassword()));
-        user.setRole(USER);
+    private User createUser(ConfirmationResult result) {
+        var user = User.builder()
+                .phone(result.getPhone())
+                .fullName(result.getFullName())
+                .email(result.getEmail())
+                .password(encoder.encode(result.getPassword()))
+                .login(result.getLogin())
+                .role(USER).build();
         return userComponent.create(user);
     }
 
