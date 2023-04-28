@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import test.dto.ClientRegisterRequest;
 import test.mapper.ProfileMapper;
 import test.model.User;
+import test.service.ResultComponent;
 import test.service.UserComponent;
 import test.service.UserService;
 
@@ -24,10 +25,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserComponent userComponent;
 
+    private final ResultComponent resultComponent;
+
     @Override
     public void create(ClientRegisterRequest registerDto) {
         User user = profileMapper.fromRegisterDto(registerDto);
         userComponent.create(user);
+        resultComponent.createResult(user);
     }
 
     @Override
