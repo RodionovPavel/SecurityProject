@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "question12")
+@Table(name = "question13")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +23,7 @@ public class Question {
     private Integer weight;
 
     @Column(name = "title_question")
-    private Integer titleQuestion;
+    private String titleQuestion;
 
     @Column(name = "question", updatable = false, nullable = false, length = 4000)
     private String question;

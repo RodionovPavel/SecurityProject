@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.UUID;
 
 @Entity
-@Table(name = "client")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +32,8 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue
     private UUID id;
+
+    private Long chatId; // добавить везде
 
     @Column(name = "login", updatable = false, nullable = false, length = 40, unique = true)
     private String login;
