@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     public void create(ClientRegisterRequest registerDto) {
         User user = profileMapper.fromRegisterDto(registerDto);
         userComponent.create(user);
-        resultComponent.createResult(user);
+        resultComponent.create(user);
     }
 
     @Override

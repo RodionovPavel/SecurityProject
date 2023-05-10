@@ -23,4 +23,6 @@ public interface QuestionComponent {
     List<Question> readAll();
 
     long size();
+
+    Question getRandomQuestion();
 }

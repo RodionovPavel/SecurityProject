@@ -21,8 +21,8 @@ public class UserComponentImpl implements UserComponent {
 
     @Override
     public User create(User user) {
-        log.info("User '{}' is created", user.getLogin());
         userRepository.save(user);
+        log.info("User '{}' is created", user.getLogin());
         return user;
     }
 
@@ -30,6 +30,11 @@ public class UserComponentImpl implements UserComponent {
     public User getUserById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь с id" + id + " не найден"));
+    }
+
+    @Override
+    public Optional<User> findByChatId(Long chatId) {
+        return userRepository.findByChatId(chatId);
     }
 
     @Override

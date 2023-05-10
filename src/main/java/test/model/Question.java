@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "question13")
+@Table(name = "question16")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,8 +28,14 @@ public class Question {
     @Column(name = "question", updatable = false, nullable = false, length = 4000)
     private String question;
 
-    @Column(name = "answer", updatable = false, nullable = false, length = 2000)
-    private String answer;
+    @Column(name = "answer1", updatable = false, nullable = false, length = 2000)
+    private String answer1;
+
+    @Column(name = "answer2", updatable = false, nullable = false, length = 2000)
+    private String answer2;
+
+    @Column(name = "right_answer", updatable = false, nullable = false, length = 2000)
+    private String rightAnswer;
 
     @Column(name = "if_right_answer", updatable = false, nullable = false, length = 2000)
     private String ifRightAnswer;

@@ -6,13 +6,13 @@ import org.springframework.stereotype.Component;
 import test.dto.QuestionRequest;
 import test.mapper.QuestionMapper4;
 import test.model.Question;
-import test.model.Result;
 import test.repository.QuestionRepository;
 import test.service.QuestionComponent;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 @Slf4j
@@ -20,8 +20,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class QuestionComponentImpl implements QuestionComponent {
     private final QuestionMapper4 questionMapper;
-
-//    private final QuestionComponent questionComponent;
 
     private final QuestionRepository questionRepository;
 
@@ -74,5 +72,15 @@ public class QuestionComponentImpl implements QuestionComponent {
     @Override
     public long size() {
         return questionRepository.count();
+    }
+
+    @Override
+    public Question getRandomQuestion() {
+        var question = questionRepository.findAll();
+        var random = new Random();
+        var randomId = random.nextLong(questionRepository.count());
+
+        return question.get((int) randomId);
+
     }
 }

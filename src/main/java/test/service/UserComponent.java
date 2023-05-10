@@ -23,4 +23,6 @@ public interface UserComponent {
     List<User> readAll();
 
     long size();
+
+    Optional<User> findByChatId(Long chatId);
 }
