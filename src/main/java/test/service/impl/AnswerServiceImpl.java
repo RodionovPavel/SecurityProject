@@ -25,13 +25,12 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public SendMessage checkAnswer(Long chatId, Question question, String callbackData) {
-        String rightAnswer = "";
-        rightAnswer = question.getRightAnswer();
+        String rightAnswer = question.getRightAnswer();
 
         switch (callbackData) {
             case "A", "B", "C", "D" -> {
                 var user = userComponent.findByChatId(chatId);
-                var myResult = resultComponent.findById(user.get().getId());
+                var myResult = resultComponent.findById(user.get().getId()); //todo обработка .get
                 var currentCountQuestions = myResult.get().getCountQuestions();
                 myResult.get().setCountQuestions(currentCountQuestions + 1);
 

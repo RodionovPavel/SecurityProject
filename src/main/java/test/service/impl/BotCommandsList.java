@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class BotCommandsList {
+public class BotCommandsList { //todo не используется
     private List<BotCommand> listOfCommands;
 
     public BotCommandsList() {

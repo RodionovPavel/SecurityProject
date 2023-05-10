@@ -36,12 +36,13 @@ public class QuestionComponentImpl implements QuestionComponent {
         log.info("Update user id '{}', userName '{}'", id, requestDto.getTitleQuestion());
         Optional<Question> findQuestion = questionRepository.findById(id);
 
-        if (findQuestion.isPresent()) {
-            Question question = questionMapper.fromAddDto2(requestDto);
-            questionRepository.save(question);
-            return question;
+        if (findQuestion.isEmpty()) {
+            return null;
         }
-        return null;
+        //todo Идёт обновление, не созд новый! id будут разные
+        Question question = questionMapper.fromAddDto2(requestDto);
+        questionRepository.save(question);
+        return question;
     }
 
     @Override

@@ -30,7 +30,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final BotButtons botButtons;
 
     List<BotCommand> listOfCommands;
-    private SendMessage message;
 
 
     @Override
@@ -63,7 +62,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void executeMessage(SendMessage message) {
-        this.message = message;
         try {
             execute(message);
         } catch (TelegramApiException e) {

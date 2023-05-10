@@ -29,8 +29,7 @@ public class ResultComponentImpl implements ResultComponent {
         result.setUserId(user.getId());
         result.setCountQuestions(0);
         result.setCountRightAnswers(0);
-        resultRepository.save(result);
-        return result;
+        return resultRepository.save(result);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class ResultComponentImpl implements ResultComponent {
 
             Integer rightAnswers  = sortedResult.get(i).getCountRightAnswers();
             log.info(String.valueOf(rightAnswers));
-            Integer score = rightAnswers * 100 / countQuestions;
+            var score = rightAnswers * 100 / countQuestions;
             String defaultText = (i + 1) + ". " + name + " - " + score + " баллов";
             switch (i) {
                 case (0) -> sendText = defaultText + " " + EmojiParser.parseToUnicode(":first_place_medal:");
@@ -71,7 +70,7 @@ public class ResultComponentImpl implements ResultComponent {
     @Override
     public String getMyScore(long chatId) {
         var results = userComponent.findByChatId(chatId);
-        var userId = results.get().getId();
+        var userId = results.get().getId(); //todo везде где светится не должно светится!
         var countQuestions = resultRepository.findById(userId).get().getCountQuestions();
         var rightAnswers = resultRepository.findById(userId).get().getCountRightAnswers();
 
@@ -82,8 +81,7 @@ public class ResultComponentImpl implements ResultComponent {
 
     @Override
     public Optional<Result> findById(UUID id) {
-        var result = resultRepository.findById(id);
-        return result;
+        return resultRepository.findById(id);
     }
 
     @Override

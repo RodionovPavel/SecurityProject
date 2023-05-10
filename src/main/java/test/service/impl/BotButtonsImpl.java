@@ -28,7 +28,7 @@ public class BotButtonsImpl implements BotButtons {
         List<InlineKeyboardButton> rowInLine = new ArrayList<>();
         var aButton = new InlineKeyboardButton();
         aButton.setText("Следующий вопрос");
-        aButton.setCallbackData("NEXT_QUESTION");
+        aButton.setCallbackData("NEXT_QUESTION"); //todo Структура
 
         List<InlineKeyboardButton> rowInLine2 = new ArrayList<>();
         var bButton = new InlineKeyboardButton();
