@@ -1,5 +1,6 @@
 package test.service;
 
+import test.dto.ClientResponse;
 import test.model.User;
 
 import java.util.List;
@@ -11,6 +12,8 @@ public interface UserComponent {
     User create(User user);
 
     User getUserById(UUID id);
+
+    ClientResponse getClient();
 
     Optional<User> findByLogin(String login);
 

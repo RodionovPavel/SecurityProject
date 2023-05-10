@@ -22,6 +22,7 @@ public class EmailServiceImpl implements EmailService {
         simpleMailMessage.setTo(toAddress);
         simpleMailMessage.setSubject(subject);
         simpleMailMessage.setText(message);
+        simpleMailMessage.setFrom("elizavetabuilina@yandex.ru");
         emailSender.send(simpleMailMessage);
         } catch (MailException mailException) {
             log.error("Ошибка отправки email");

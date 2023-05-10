@@ -2,7 +2,12 @@ package test.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import test.dto.ClientResponse;
+import test.exsap.CustomException;
 import test.model.User;
 import test.repository.UserRepository;
 import test.service.UserComponent;
@@ -29,7 +34,18 @@ public class UserComponentImpl implements UserComponent {
     @Override
     public User getUserById(UUID id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь с id" + id + " не найден"));
+                .orElseThrow(() -> new CustomException("Пользователь с id" + id + " не найден"));
+    }
+
+    @Override
+    public ClientResponse getClient() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User)authentication.getPrincipal();
+        return ClientResponse.builder()
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .fullName(user.getFullName())
+                .login(user.getLogin()).build();
     }
 
     @Override
@@ -40,7 +56,7 @@ public class UserComponentImpl implements UserComponent {
     @Override
     public User getByLogin(String login) {
         return userRepository.findByLogin(login)
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь с логином " + login + " не найден"));
+                .orElseThrow(() -> new CustomException("Пользователь с логином " + login + " не найден"));
     }
 
     @Override

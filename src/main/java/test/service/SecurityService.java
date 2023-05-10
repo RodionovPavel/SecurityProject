@@ -15,4 +15,6 @@ public interface SecurityService {
 
     ConfirmationResponse confirm(UUID operationId, String otpCode);
 
+    String getOtp(UUID operationId);
+
 }

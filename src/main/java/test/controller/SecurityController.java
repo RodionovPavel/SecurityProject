@@ -6,8 +6,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +30,8 @@ import test.dto.OtpResponse;
 import test.service.SecurityService;
 
 import javax.validation.Valid;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Validated
@@ -51,9 +62,18 @@ public class SecurityController {
         return ResponseEntity.ok(profileService.auth(request.getLogin(), request.getPassword()));
     }
 
+    @PostMapping("/otp/{operationId}")
+    public ResponseEntity<String> otp(@PathVariable UUID operationId) {
+        log.info("Get otp by operationId: '{}'", operationId);
+        return ResponseEntity.ok(profileService.getOtp(operationId));
+    }
+
     @PostMapping("/confirm")
     public ResponseEntity<ConfirmationResponse> confirm(@RequestBody ConfirmationRequest request) {
         log.info("Confirmation with operationId: '{}'", request.getOperationId());
         return ResponseEntity.ok(profileService.confirm(request.getOperationId(), request.getOtpCode()));
     }
+
+
+
 }

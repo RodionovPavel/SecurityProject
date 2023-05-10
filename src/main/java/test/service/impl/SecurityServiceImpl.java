@@ -11,6 +11,7 @@ import test.dto.ConfirmationResult;
 import test.dto.JwtResponse;
 import test.dto.OtpData;
 import test.dto.OtpResponse;
+import test.exsap.CustomException;
 import test.model.User;
 import test.service.EmailService;
 import test.service.OtpService;
@@ -45,7 +46,7 @@ public class SecurityServiceImpl implements SecurityService {
     public JwtResponse auth(String login, String password) {
         var user = userComponent.getByLogin(login);
         if (!encoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Не верный пароль");
+            throw new CustomException("Не верный пароль");
         }
         return new JwtResponse(jwtProvider.generateToken(login));
     }
@@ -71,6 +72,11 @@ public class SecurityServiceImpl implements SecurityService {
                 .build();
     }
 
+    @Override
+    public String getOtp(UUID operationId) {
+        return otpService.getOtpCode(operationId);
+    }
+
     private User createUser(ConfirmationResult result) {
         var user = User.builder()
                 .phone(result.getPhone())
@@ -86,7 +92,7 @@ public class SecurityServiceImpl implements SecurityService {
         var userFind = userComponent.findByLogin(login);
 
         if (userFind.isPresent()) {
-            throw new RuntimeException("Пользователь с таким логином уже существует");
+            throw new CustomException("Пользователь с таким логином уже существует");
         }
     }
 

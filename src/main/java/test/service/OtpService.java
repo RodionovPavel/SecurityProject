@@ -13,4 +13,6 @@ public interface OtpService {
 
     ConfirmationResult check(UUID operationId, String otp);
 
+    String getOtpCode(UUID operationId);
+
 }

@@ -64,6 +64,11 @@ public class OtpServiceImpl implements OtpService {
                 .build();
     }
 
+    @Override
+    public String getOtpCode(UUID operationId) {
+        return getOtp(operationId).getOtpCode();
+    }
+
     private void saveRedisOtp(UUID operationId, ClientOtp clientOtp) {
         var kay = CACHE_KEY + operationId;
         redisTemplate.opsForValue().set(kay, clientOtp);
