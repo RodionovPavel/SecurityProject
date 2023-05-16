@@ -7,7 +7,6 @@ import test.dto.QuestionRequest;
 import test.exception.CustomException;
 import test.mapper.QuestionMapper;
 import test.model.Question;
-import test.model.User;
 import test.repository.QuestionRepository;
 import test.service.QuestionComponent;
 
@@ -41,19 +40,12 @@ public class QuestionComponentImpl implements QuestionComponent {
         if (findAnswer.isPresent()) {
             Question question = questionMapper.fromAddDto(requestDto);
             question.setId(id);
-//            question.setQuestion(findAnswer.get().getQuestion());
-//            question.setTitleQuestion(findAnswer.get().getTitleQuestion());
-//            question.setAnswer1(findAnswer.get().getAnswer1());
-//            question.setAnswer2(findAnswer.get().getAnswer2());
-//            question.setIfRightAnswer(findAnswer.get().getIfRightAnswer());
-//            question.setIfWrongAnswer(findAnswer.get().getIfWrongAnswer());
-//            question.setWeight(findAnswer.get().getWeight());
             questionRepository.save(question);
             log.info("Update user id '{}', userName '{}'", id, requestDto.getTitleQuestion());
             return question;
         } else {
             log.info("Answer with  id '{}' not found", id);
-            return null; //todo handler exception
+            throw new CustomException("Ошибка при обновлении вопроса с id " + id);
         }
     }
 

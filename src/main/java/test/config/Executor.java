@@ -90,7 +90,7 @@ public class Executor {
                 SendMessage message = new SendMessage();
                 message.setChatId(String.valueOf(chatId));
 
-                if (userComponent.getByChatId(chatId).isEmpty()) {
+                if (userComponent.findByChatId(chatId).isEmpty()) {
                     var chat = msg.getChat();
                     var newUser = createDefaultUser(chatId, chat.getUserName());
 
@@ -177,10 +177,7 @@ public class Executor {
         newUser.setChatId(chatId);
         newUser.setLogin(name);
         newUser.setFullName(name);
-        newUser.setPassword("");
         newUser.setRole(Role.USER);
-        newUser.setPhone("");
-        newUser.setEmail("");
         newUser.setCreateDate(LocalDateTime.now());
 
         userComponent.create(newUser);

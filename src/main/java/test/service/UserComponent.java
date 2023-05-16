@@ -24,8 +24,8 @@ public interface UserComponent {
 
     long size();
 
-    User findByChatId(Long chatId);
+    Optional<User> findByChatId(Long chatId);
 
-    Optional<User> getByChatId(Long chatId);
+    User getByChatId(Long chatId);
 
 }

@@ -15,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class Question {
+
     @Id
     @GeneratedValue
     private UUID id;
@@ -36,4 +37,5 @@ public class Question {
 
     @Column(name = "if_wrong_answer", nullable = false, length = 2000)
     private String ifWrongAnswer;
+
 }

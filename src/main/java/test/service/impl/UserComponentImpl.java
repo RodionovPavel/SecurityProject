@@ -34,9 +34,8 @@ public class UserComponentImpl implements UserComponent {
     }
 
     @Override
-    public User findByChatId(Long chatId) {
-        return userRepository.findByChatId(chatId)
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь с chatId " + chatId + " не найден"));
+    public Optional<User> findByChatId(Long chatId) {
+        return userRepository.findByChatId(chatId);
     }
 
     @Override
@@ -71,7 +70,8 @@ public class UserComponentImpl implements UserComponent {
     }
 
     @Override
-    public Optional<User> getByChatId(Long chatId) {
-        return userRepository.findByChatId(chatId);
+    public User getByChatId(Long chatId) {
+        return userRepository.findByChatId(chatId)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с chatId " + chatId + " не найден"));
     }
 }

@@ -1,6 +1,5 @@
 package test.service;
 
-import test.dto.ConfirmationResponse;
 import test.dto.ConfirmationResult;
 import test.dto.OtpData;
 

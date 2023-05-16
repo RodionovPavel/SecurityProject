@@ -27,7 +27,6 @@ public class ResultComponentImpl implements ResultComponent {
     @Override
     public Result create(User user) {
         Result result = new Result();
-//        result.setId(12);
         result.setUserId(user.getId());
         result.setCountQuestions(0);
         result.setCountRightAnswers(0);
@@ -70,7 +69,7 @@ public class ResultComponentImpl implements ResultComponent {
 
     @Override
     public String getMyScore(long chatId) {
-        var results = userComponent.findByChatId(chatId);
+        var results = userComponent.getByChatId(chatId);
         var userId = results.getId();
         var countQuestions = getByUserId(userId).getCountQuestions();
         var rightAnswers = getByUserId(userId).getCountRightAnswers();
@@ -90,13 +89,6 @@ public class ResultComponentImpl implements ResultComponent {
         resultRepository.save(result);
         return result;
     }
-
-//    @Override
-//    public Result getById(Integer id) {
-//        var result = resultRepository.findById(id);
-//        return result
-//                .orElseThrow(() -> new EntityNotFoundException("Результат с id" + id + " не найден"));
-//    }
 
     @Override
     public Result getByUserId(UUID id){

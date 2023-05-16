@@ -29,7 +29,7 @@ public class AnswerServiceImpl implements AnswerService {
 
         switch (callbackData) {
             case "A", "B", "C", "D" -> {
-                var user = userComponent.findByChatId(chatId);
+                var user = userComponent.getByChatId(chatId);
                 var myResult = resultComponent.getByUserId(user.getId());
                 var currentCountQuestions = myResult.getCountQuestions();
                 myResult.setCountQuestions(currentCountQuestions + 1);
@@ -64,5 +64,6 @@ public class AnswerServiceImpl implements AnswerService {
         message.setText(textToSend);
 
         return message;
+
     }
 }

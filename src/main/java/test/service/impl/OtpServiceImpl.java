@@ -48,7 +48,7 @@ public class OtpServiceImpl implements OtpService {
             updateRedisOtp(clientOtp, operationId);
             return ConfirmationResult.builder()
                     .result(false)
-                    .message("Не верный код").build();
+                    .message("Неверный код").build();
         }
 
         return ConfirmationResult.builder()
