@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import test.model.enums.Role;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +23,7 @@ import java.util.Collections;
 import java.util.UUID;
 
 @Entity
-@Table(name = "client")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +33,8 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue
     private UUID id;
+
+    private Long chatId; // добавить везде
 
     @Column(name = "login", updatable = false, nullable = false, length = 40, unique = true)
     private String login;

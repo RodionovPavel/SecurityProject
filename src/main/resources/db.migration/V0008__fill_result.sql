@@ -1,0 +1,1 @@
+INSERT INTO result VALUES (nextval('SEQ_JUST_FOR_TEST'), '2746190b-c9ad-4874-814c-0b5a1f5507ec', 100, 80);

@@ -10,5 +10,4 @@ public interface UserService {
 
     void update(UUID id, ClientRegisterRequest registerDto);
 
-
 }

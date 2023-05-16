@@ -19,18 +19,23 @@ public class UserComponentImpl implements UserComponent {
 
     private final UserRepository userRepository;
 
+
     @Override
     public User create(User user) {
-        log.info("User '{}' is created", user.getLogin());
-        user.setId(UUID.randomUUID());
         userRepository.save(user);
+        log.info("User '{}' is created", user.getLogin());
         return user;
     }
 
     @Override
     public User getUserById(UUID id) {
-        Optional<User> user = userRepository.findById(id);
-        return user.orElse(null); //WTF! ОПШИНАЛ ТАКОЙ "НК ДА НУ ДА, ПОШЁЛ Я ЛЕСОМ"
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с id" + id + " не найден"));
+    }
+
+    @Override
+    public Optional<User> findByChatId(Long chatId) {
+        return userRepository.findByChatId(chatId);
     }
 
     @Override
@@ -49,8 +54,9 @@ public class UserComponentImpl implements UserComponent {
         userRepository.deleteById(id);
     }
 
-    public Optional<User> findById(UUID id) {
-        return userRepository.findById(id);
+    public User findById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с логином " + id + " не найден"));
     }
 
     @Override
@@ -61,5 +67,11 @@ public class UserComponentImpl implements UserComponent {
     @Override
     public long size() {
         return userRepository.count();
+    }
+
+    @Override
+    public User getByChatId(Long chatId) {
+        return userRepository.findByChatId(chatId)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с chatId " + chatId + " не найден"));
     }
 }

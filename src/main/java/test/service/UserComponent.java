@@ -16,11 +16,16 @@ public interface UserComponent {
 
     User getByLogin(String login);
 
-    Optional<User> findById(UUID id);
+    User findById(UUID id);
 
     void deleteById(UUID id);
 
     List<User> readAll();
 
     long size();
+
+    Optional<User> findByChatId(Long chatId);
+
+    User getByChatId(Long chatId);
+
 }

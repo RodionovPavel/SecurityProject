@@ -1,5 +1,6 @@
-CREATE TABLE client (
+CREATE TABLE users (
   id UUID PRIMARY KEY,
+  chat_id BIGINT NOT NULL,
   login VARCHAR(40) NOT NULL UNIQUE,
   password VARCHAR(250) NOT NULL,
   full_name VARCHAR(40) NOT NULL,
