@@ -17,34 +17,48 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BotButtonsImpl implements BotButtons {
 
+    private static final String SEPARATOR = "-----------------------";
+
     @Override
     public SendMessage addButtonWhatElse(long chatId) {
-        var sendMessage = new SendMessage();
-        sendMessage.setText("-----------------------");
-        sendMessage.setChatId(chatId);
-
+        var sendMessage = createBaseSendMessage(chatId);
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInLine = createRowsInLine(markupInline);
+        addButtonsToRows(rowsInLine);
+        sendMessage.setReplyMarkup(markupInline);
+        return sendMessage;
+    }
+
+    private SendMessage createBaseSendMessage(long chatId) {
+        var sendMessage = new SendMessage();
+        sendMessage.setText(SEPARATOR);
+        sendMessage.setChatId(chatId);
+        return sendMessage;
+    }
+
+    private List<List<InlineKeyboardButton>> createRowsInLine(InlineKeyboardMarkup markupInline) {
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-        var aButton = new InlineKeyboardButton();
-        aButton.setText("Следующий вопрос");
-        aButton.setCallbackData("NEXT_QUESTION"); //todo Структура
+        markupInline.setKeyboard(rowsInLine);
+        return rowsInLine;
+    }
+
+    private void addButtonsToRows(List<List<InlineKeyboardButton>> rowsInLine) {
+        List<InlineKeyboardButton> rowInLine1 = new ArrayList<>();
+        var aButton = createInlineKeyboardButton("Следующий вопрос", "NEXT_QUESTION");
+        rowInLine1.add(aButton);
+        rowsInLine.add(rowInLine1);
 
         List<InlineKeyboardButton> rowInLine2 = new ArrayList<>();
-        var bButton = new InlineKeyboardButton();
-        bButton.setText("В меню");
-        bButton.setCallbackData("MENU");
-
-        rowInLine.add(aButton);
+        var bButton = createInlineKeyboardButton("В меню", "MENU");
         rowInLine2.add(bButton);
-
-        rowsInLine.add(rowInLine);
         rowsInLine.add(rowInLine2);
+    }
 
-        markupInline.setKeyboard(rowsInLine);
-        sendMessage.setReplyMarkup(markupInline);
-
-        return sendMessage;
+    private InlineKeyboardButton createInlineKeyboardButton(String text, String callbackData) {
+        var button = new InlineKeyboardButton();
+        button.setText(text);
+        button.setCallbackData(callbackData);
+        return button;
     }
 
     @Override
@@ -52,36 +66,29 @@ public class BotButtonsImpl implements BotButtons {
         var sendMessage = new SendMessage();
         sendMessage.setText(question.getQuestion());
         sendMessage.setChatId(chatId);
+        sendMessage.setReplyMarkup(createKeyboardMarkup());
+        return sendMessage;
+    }
 
+    private InlineKeyboardMarkup createKeyboardMarkup() {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
         List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-        var aButton = new InlineKeyboardButton();
-        aButton.setText("A");
-        aButton.setCallbackData("A");
 
-        var bButton = new InlineKeyboardButton();
-        bButton.setText("B");
-        bButton.setCallbackData("B");
-
-        var cButton = new InlineKeyboardButton();
-        cButton.setText("C");
-        cButton.setCallbackData("C");
-
-        var dButton = new InlineKeyboardButton();
-        dButton.setText("D");
-        dButton.setCallbackData("D");
-
-        rowInLine.add(aButton);
-        rowInLine.add(bButton);
-        rowInLine.add(cButton);
-        rowInLine.add(dButton);
+        rowInLine.add(addButton("A"));
+        rowInLine.add(addButton("B"));
+        rowInLine.add(addButton("C"));
+        rowInLine.add(addButton("D"));
 
         rowsInLine.add(rowInLine);
-
         markupInline.setKeyboard(rowsInLine);
-        sendMessage.setReplyMarkup(markupInline);
+        return markupInline;
+    }
 
-        return sendMessage;
+    private InlineKeyboardButton addButton(String buttonLabel) {
+        var button = new InlineKeyboardButton();
+        button.setText(buttonLabel);
+        button.setCallbackData(buttonLabel);
+        return button;
     }
 }

@@ -25,4 +25,6 @@ public interface QuestionComponent {
     long size();
 
     Question getRandomQuestion();
+
+    Optional<Question> getById (UUID id);
 }

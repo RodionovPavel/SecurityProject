@@ -11,7 +11,7 @@ import test.service.ResultComponent;
 import test.service.UserComponent;
 import test.service.UserService;
 
-import java.util.Optional;
+import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Log4j2
@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final ResultComponent resultComponent;
 
     @Override
+    @Transactional
     public void create(ClientRegisterRequest registerDto) {
         User user = profileMapper.fromRegisterDto(registerDto);
         userComponent.create(user);
@@ -36,13 +37,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(UUID id, ClientRegisterRequest registerDto) {
-        log.info("Update user id '{}', userName '{}'", id, registerDto.getFullName());
-        Optional<User> findUser = userComponent.findById(id);
+        User findUser = userComponent.findById(id);
 
-        if (findUser.isPresent()) {
-            User user = profileMapper.fromRegisterDto(registerDto);
-            user.setPassword(encoder.encode(user.getPassword()));
-            userComponent.create(user);
-        }
+        User user = profileMapper.fromRegisterDto(registerDto);
+        findUser.setRole(user.getRole());
+        findUser.setEmail(user.getEmail());
+        findUser.setPhone(user.getPhone());
+        findUser.setFullName(user.getFullName());
+        findUser.setChatId(user.getChatId());
+        findUser.setPassword(encoder.encode(user.getPassword()));
+        userComponent.create(user);
+
+        log.info("Update user id '{}', userName '{}'", id, registerDto.getFullName());
     }
 }

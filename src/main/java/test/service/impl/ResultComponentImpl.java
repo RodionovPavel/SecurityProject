@@ -10,6 +10,7 @@ import test.repository.ResultRepository;
 import test.service.ResultComponent;
 import test.service.UserComponent;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class ResultComponentImpl implements ResultComponent {
     @Override
     public Result create(User user) {
         Result result = new Result();
+//        result.setId(12);
         result.setUserId(user.getId());
         result.setCountQuestions(0);
         result.setCountRightAnswers(0);
@@ -36,7 +38,7 @@ public class ResultComponentImpl implements ResultComponent {
     public String getTop() {
         List<Result> results = resultRepository.findAll();
 
-        String top = "Таблица победителей:\n";
+        StringBuilder top = new StringBuilder("Таблица победителей:\n");
 
         var sortedResult = results.stream()
                 .filter(s -> s.getCountQuestions() != 0)
@@ -47,12 +49,10 @@ public class ResultComponentImpl implements ResultComponent {
         String sendText = "";
 
         for (int i = 0; i < sortedResult.size(); i++) {
-            String name = userComponent.findById(sortedResult.get(i).getUserId()).get().getFullName();
+            String name = userComponent.findById(sortedResult.get(i).getUserId()).getFullName();
             Integer countQuestions = sortedResult.get(i).getCountQuestions();
-            log.info(String.valueOf(countQuestions));
 
-            Integer rightAnswers  = sortedResult.get(i).getCountRightAnswers();
-            log.info(String.valueOf(rightAnswers));
+            Integer rightAnswers = sortedResult.get(i).getCountRightAnswers();
             var score = rightAnswers * 100 / countQuestions;
             String defaultText = (i + 1) + ". " + name + " - " + score + " баллов";
             switch (i) {
@@ -61,18 +61,19 @@ public class ResultComponentImpl implements ResultComponent {
                 case (2) -> sendText = defaultText + " " + EmojiParser.parseToUnicode(":third_place_medal:");
                 default -> sendText = defaultText;
             }
-            top += "\n" + sendText;
-            log.info(top);
+
+            top.append("\n").append(sendText);
         }
-        return top;
+
+        return top.toString();
     }
 
     @Override
     public String getMyScore(long chatId) {
         var results = userComponent.findByChatId(chatId);
-        var userId = results.get().getId(); //todo везде где светится не должно светится!
-        var countQuestions = resultRepository.findById(userId).get().getCountQuestions();
-        var rightAnswers = resultRepository.findById(userId).get().getCountRightAnswers();
+        var userId = results.getId();
+        var countQuestions = getByUserId(userId).getCountQuestions();
+        var rightAnswers = getByUserId(userId).getCountRightAnswers();
 
         return "Мои результаты:\n\n" +
                 "всего ответов: " + countQuestions + "\n" +
@@ -85,8 +86,21 @@ public class ResultComponentImpl implements ResultComponent {
     }
 
     @Override
-    public void update(Result result) {
+    public Result update(Result result) {
         resultRepository.save(result);
+        return result;
     }
 
+//    @Override
+//    public Result getById(Integer id) {
+//        var result = resultRepository.findById(id);
+//        return result
+//                .orElseThrow(() -> new EntityNotFoundException("Результат с id" + id + " не найден"));
+//    }
+
+    @Override
+    public Result getByUserId(UUID id){
+        var result = resultRepository.findByUserId(id);
+        return result.orElseThrow(() -> new EntityNotFoundException("Результат с userId " + id + " не найден"));
+    }
 }

@@ -16,7 +16,7 @@ public interface UserComponent {
 
     User getByLogin(String login);
 
-    Optional<User> findById(UUID id);
+    User findById(UUID id);
 
     void deleteById(UUID id);
 
@@ -24,5 +24,8 @@ public interface UserComponent {
 
     long size();
 
-    Optional<User> findByChatId(Long chatId);
+    User findByChatId(Long chatId);
+
+    Optional<User> getByChatId(Long chatId);
+
 }

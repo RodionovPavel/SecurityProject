@@ -10,7 +10,6 @@ import test.external.model.OtpAdapterImpl;
 @RequestMapping("/otp")
 public class OtpController {
 
-//    private final ClientOtpRequest clientOtpRequest;
     private final OtpAdapterImpl otpAdapterImpl;
 
     @PostMapping()

@@ -30,21 +30,19 @@ public class AnswerServiceImpl implements AnswerService {
         switch (callbackData) {
             case "A", "B", "C", "D" -> {
                 var user = userComponent.findByChatId(chatId);
-                var myResult = resultComponent.findById(user.get().getId()); //todo обработка .get
-                var currentCountQuestions = myResult.get().getCountQuestions();
-                myResult.get().setCountQuestions(currentCountQuestions + 1);
+                var myResult = resultComponent.getByUserId(user.getId());
+                var currentCountQuestions = myResult.getCountQuestions();
+                myResult.setCountQuestions(currentCountQuestions + 1);
+                resultComponent.update(myResult);
+                var answer = question.getIfWrongAnswer();
 
                 if (callbackData.equals(rightAnswer)) {
-                    var currentRightAnswer = myResult.get().getCountRightAnswers();
-                    myResult.get().setCountRightAnswers(currentRightAnswer + 1);
-                    resultComponent.update(myResult.get());
-
-
-                    return sendMessage(chatId, question.getIfRightAnswer());
-                } else {
-
-                    return sendMessage(chatId, question.getIfWrongAnswer());
+                    var currentRightAnswer = myResult.getCountRightAnswers();
+                    myResult.setCountRightAnswers(currentRightAnswer + 1);
                 }
+
+                resultComponent.update(myResult);
+                return sendMessage(chatId, answer);
             }
 
             case "NEXT_QUESTION" -> {

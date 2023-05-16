@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import test.dto.QuestionRequest;
+import test.model.Question;
 import test.service.QuestionComponent;
 
 import javax.validation.Valid;
@@ -36,11 +37,18 @@ public class QuestionController {
     public void add(@Valid @RequestBody QuestionRequest request) {
         questionComponent.add(request);
         log.info("Added new question: '{}'", request.getTitleQuestion());
-//        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}")
+    public Question getById(@PathVariable UUID id) {
+
+        Question question = questionComponent.getQuestionById(id);
+        log.info("Request question with id: '{}'", id);
+        return question;
     }
 
     @PutMapping(value = "/{id}")
-    public void updateUser(
+    public void updateQuestion(
             @Parameter(description = "Идентификатор вопроса", required = true)
             @PathVariable UUID id,
             @Parameter(description = "Новые данные вопроса", required = true)
@@ -52,6 +60,5 @@ public class QuestionController {
     public void deleteById(@PathVariable UUID id) {
         log.info("Deleted question with id: '{}'", id);
         questionComponent.deleteById(id);
-//        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

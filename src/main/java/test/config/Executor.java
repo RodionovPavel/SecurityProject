@@ -7,9 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import test.model.BotCommands;
-import test.model.Result;
-import test.model.Role;
+import test.model.enums.BotCommands;
+import test.model.enums.Role;
 import test.model.User;
 import test.service.BotButtons;
 import test.service.QuestionComponent;
@@ -56,7 +55,6 @@ public class Executor {
                 SendMessage message = new SendMessage();
                 message.setChatId(chatId);
                 message.setText(answer);
-
                 return message;
             }
 
@@ -64,18 +62,16 @@ public class Executor {
             public boolean isSupported(String commands) {
                 return BotCommands.START.getCommand().equals(commands);
             }
-
-
         };
     }
 
     @Bean
     public MessageProcessor random() {
         return new MessageProcessor() {
+
             @Override
             public SendMessage execute(Long chatId, Message msg) {
                 var randomQuestion = questionComponent.getRandomQuestion();
-
                 return botButtons.addButtonAndSendMessage(randomQuestion, chatId);
             }
 
@@ -83,8 +79,6 @@ public class Executor {
             public boolean isSupported(String commands) {
                 return BotCommands.RANDOM.getCommand().equals(commands);
             }
-
-
         };
     }
 
@@ -94,36 +88,19 @@ public class Executor {
             @Override
             public SendMessage execute(Long chatId, Message msg) {
                 SendMessage message = new SendMessage();
+                message.setChatId(String.valueOf(chatId));
 
-                if (userComponent.findByChatId(chatId).isEmpty()) {
-
+                if (userComponent.getByChatId(chatId).isEmpty()) {
                     var chat = msg.getChat();
+                    var newUser = createDefaultUser(chatId, chat.getUserName());
 
-                    User newUser = new User();
-                    Result result = new Result();
-                    newUser.setChatId(chatId);
-                    newUser.setLogin(chat.getUserName());
-                    newUser.setFullName(chat.getUserName());
-                    newUser.setPassword("123");
-                    newUser.setRole(Role.USER);
-                    newUser.setPhone("79991231233");
-                    newUser.setEmail("email@email.ru");
-                    newUser.setCreateDate(LocalDateTime.now());
-                    userComponent.create(newUser);
-
-                    result.setUserId(newUser.getId());
-                    result.setCountQuestions(0);
-                    result.setCountRightAnswers(0);
                     resultComponent.create(newUser);
+                    log.info("Добавлено в результат");
 
-
-                    log.info("Пользователь зарегистрирован: " + newUser);
-                    message.setChatId(String.valueOf(chatId));
-                    message.setText("Отлично! " + chat.getUserName() + ", Вы зарегистрированы в нашем рейтинге и можете отслеживать результаты по команде /myScore\n" +
+                    log.info("Пользователь зарегистрирован: " + chat.getUserName());
+                    message.setText("Отлично! " + chat.getUserName() + ", Вы зарегистрированы в нашем рейтинге и можете отслеживать результаты по команде /score\n" +
                             "\n Чтобы начать отвечать на вопросы - нажмите /random");
                 } else {
-
-                    message.setChatId(String.valueOf(chatId));
                     message.setText("Вы уже зарегистрированы в нашем рейтинге\n\n" +
                             "Смело переходи к вопросам /random");
                 }
@@ -135,8 +112,6 @@ public class Executor {
             public boolean isSupported(String commands) {
                 return BotCommands.REGISTER.getCommand().equals(commands);
             }
-
-
         };
     }
 
@@ -148,7 +123,6 @@ public class Executor {
                 SendMessage message = new SendMessage();
                 message.setChatId(chatId);
                 message.setText(HELP_TEXT);
-
                 return message;
             }
 
@@ -156,8 +130,6 @@ public class Executor {
             public boolean isSupported(String commands) {
                 return BotCommands.HELP.getCommand().equals(commands);
             }
-
-
         };
     }
 
@@ -170,7 +142,6 @@ public class Executor {
                 SendMessage message = new SendMessage();
                 message.setChatId(chatId);
                 message.setText(top);
-
                 return message;
             }
 
@@ -178,8 +149,6 @@ public class Executor {
             public boolean isSupported(String commands) {
                 return BotCommands.TOP.getCommand().equals(commands);
             }
-
-
         };
     }
 
@@ -192,7 +161,6 @@ public class Executor {
                 SendMessage message = new SendMessage();
                 message.setChatId(chatId);
                 message.setText(sendText);
-
                 return message;
             }
 
@@ -200,8 +168,22 @@ public class Executor {
             public boolean isSupported(String commands) {
                 return BotCommands.SCORE.getCommand().equals(commands);
             }
-
-
         };
+    }
+
+    private User createDefaultUser(long chatId, String name) {
+        var newUser = new User();
+
+        newUser.setChatId(chatId);
+        newUser.setLogin(name);
+        newUser.setFullName(name);
+        newUser.setPassword("");
+        newUser.setRole(Role.USER);
+        newUser.setPhone("");
+        newUser.setEmail("");
+        newUser.setCreateDate(LocalDateTime.now());
+
+        userComponent.create(newUser);
+        return newUser;
     }
 }

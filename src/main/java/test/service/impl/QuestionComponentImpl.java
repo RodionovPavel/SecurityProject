@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import test.dto.QuestionRequest;
-import test.mapper.QuestionMapper4;
+import test.exception.CustomException;
+import test.mapper.QuestionMapper;
 import test.model.Question;
+import test.model.User;
 import test.repository.QuestionRepository;
 import test.service.QuestionComponent;
 
@@ -19,13 +21,13 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class QuestionComponentImpl implements QuestionComponent {
-    private final QuestionMapper4 questionMapper;
+    private final QuestionMapper questionMapper;
 
     private final QuestionRepository questionRepository;
 
     @Override
     public Question add(QuestionRequest requestDto) {
-        Question question = questionMapper.fromAddDto2(requestDto);
+        Question question = questionMapper.fromAddDto(requestDto);
         log.info("Question '{}' added", question.getId());
         questionRepository.save(question);
         return question;
@@ -33,16 +35,26 @@ public class QuestionComponentImpl implements QuestionComponent {
 
     @Override
     public Question update(UUID id, QuestionRequest requestDto) {
-        log.info("Update user id '{}', userName '{}'", id, requestDto.getTitleQuestion());
-        Optional<Question> findQuestion = questionRepository.findById(id);
 
-        if (findQuestion.isEmpty()) {
-            return null;
+        Optional<Question> findAnswer = questionRepository.findById(id);
+
+        if (findAnswer.isPresent()) {
+            Question question = questionMapper.fromAddDto(requestDto);
+            question.setId(id);
+//            question.setQuestion(findAnswer.get().getQuestion());
+//            question.setTitleQuestion(findAnswer.get().getTitleQuestion());
+//            question.setAnswer1(findAnswer.get().getAnswer1());
+//            question.setAnswer2(findAnswer.get().getAnswer2());
+//            question.setIfRightAnswer(findAnswer.get().getIfRightAnswer());
+//            question.setIfWrongAnswer(findAnswer.get().getIfWrongAnswer());
+//            question.setWeight(findAnswer.get().getWeight());
+            questionRepository.save(question);
+            log.info("Update user id '{}', userName '{}'", id, requestDto.getTitleQuestion());
+            return question;
+        } else {
+            log.info("Answer with  id '{}' not found", id);
+            return null; //todo handler exception
         }
-        //todo Идёт обновление, не созд новый! id будут разные
-        Question question = questionMapper.fromAddDto2(requestDto);
-        questionRepository.save(question);
-        return question;
     }
 
     @Override
@@ -54,6 +66,12 @@ public class QuestionComponentImpl implements QuestionComponent {
     @Override
     public Optional<Question> findByTitleQuestion(String titleQuestion) {
         return questionRepository.findByTitleQuestion(titleQuestion);
+    }
+
+    @Override
+    public Optional<Question> getById (UUID id) {
+        return Optional.of(questionRepository.findById(id))
+                .orElseThrow(() -> new CustomException("Вопрос с id" + id + " не найден"));
     }
 
     @Override
@@ -82,6 +100,5 @@ public class QuestionComponentImpl implements QuestionComponent {
         var randomId = random.nextLong(questionRepository.count());
 
         return question.get((int) randomId);
-
     }
 }

@@ -3,13 +3,7 @@ package test.controller;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import test.dto.ClientRegisterRequest;
 import test.model.User;
 import test.service.UserComponent;
@@ -20,18 +14,13 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/admin/user")
 public class UserController {
 
     private final UserService userService;
     private final UserComponent userComponent;
 
-    @SecurityRequirement(name = "JWT")
-    @GetMapping("/hello")
-    public String index() {
-        return "Hello, world!!!";
-    }
-
-    @PostMapping("/user")
+    @PostMapping("/")
     public void create(@RequestBody ClientRegisterRequest registerDto) {
         userService.create(registerDto);
     }
@@ -45,12 +34,12 @@ public class UserController {
         userService.update(id, registerDto);
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "/{id}")
     public User getUserById(@PathVariable UUID id) {
         return userComponent.getUserById(id);
     }
 
-    @DeleteMapping(value = "/admin/{id}")
+    @DeleteMapping(value = "/{id}")
     @SecurityRequirement(name = "JWT")
     public void deleteById(@PathVariable UUID id) {
         userComponent.deleteById(id);
@@ -61,7 +50,7 @@ public class UserController {
         return userComponent.readAll();
     }
 
-    @GetMapping("/admin/size")
+    @GetMapping("/size")
     public long size() {
         return userComponent.size();
     }

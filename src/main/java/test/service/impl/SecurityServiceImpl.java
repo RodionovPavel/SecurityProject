@@ -19,7 +19,7 @@ import test.service.UserComponent;
 
 import java.util.UUID;
 
-import static test.model.Role.USER;
+import static test.model.enums.Role.USER;
 
 @Log4j2
 @Service

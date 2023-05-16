@@ -1,4 +1,4 @@
-package test.model;
+package test.model.enums;
 
 public enum Role {
     ADMIN,

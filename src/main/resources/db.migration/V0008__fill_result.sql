@@ -1,0 +1,5 @@
+INSERT INTO result VALUES (nextval('SEQ_JUST_FOR_TEST'), '2746190b-c9ad-4874-814c-0b5a1f5507ec', 100, 80);
+--INSERT INTO result VALUES (nextval('SEQ_JUST_FOR_TEST'), '38c5a9d5-f214-466c-b77a-59836a1f567e', 100, 90);
+--INSERT INTO result VALUES (nextval('SEQ_JUST_FOR_TEST'), '33d9ecd9-3f1f-458a-80e6-f8e437e376b9', 100, 70);
+--INSERT INTO result VALUES (nextval('SEQ_JUST_FOR_TEST'), 'ded11421-15a2-4d9d-9bd9-e94284ae1785', 10, 6);
+--INSERT INTO result VALUES (nextval('SEQ_JUST_FOR_TEST'), 'ba665e21-f058-4aec-a891-574ccf2f49e4', 0, 0);

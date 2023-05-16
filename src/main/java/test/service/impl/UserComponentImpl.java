@@ -19,6 +19,7 @@ public class UserComponentImpl implements UserComponent {
 
     private final UserRepository userRepository;
 
+
     @Override
     public User create(User user) {
         userRepository.save(user);
@@ -33,8 +34,9 @@ public class UserComponentImpl implements UserComponent {
     }
 
     @Override
-    public Optional<User> findByChatId(Long chatId) {
-        return userRepository.findByChatId(chatId);
+    public User findByChatId(Long chatId) {
+        return userRepository.findByChatId(chatId)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с chatId " + chatId + " не найден"));
     }
 
     @Override
@@ -53,8 +55,9 @@ public class UserComponentImpl implements UserComponent {
         userRepository.deleteById(id);
     }
 
-    public Optional<User> findById(UUID id) {
-        return userRepository.findById(id);
+    public User findById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с логином " + id + " не найден"));
     }
 
     @Override
@@ -65,5 +68,10 @@ public class UserComponentImpl implements UserComponent {
     @Override
     public long size() {
         return userRepository.count();
+    }
+
+    @Override
+    public Optional<User> getByChatId(Long chatId) {
+        return userRepository.findByChatId(chatId);
     }
 }

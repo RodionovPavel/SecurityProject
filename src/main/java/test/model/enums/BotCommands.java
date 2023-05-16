@@ -1,4 +1,4 @@
-package test.model;
+package test.model.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -15,5 +15,9 @@ public interface ResultComponent {
 
     Optional<Result> findById(UUID id);
 
-    void update(Result result);
+//    Result getById(Integer id);
+
+    Result update(Result result);
+
+    Result getByUserId(UUID id);
 }
