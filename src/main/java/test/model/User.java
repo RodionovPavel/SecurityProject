@@ -14,12 +14,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -56,6 +62,16 @@ public class User implements UserDetails {
     @CreationTimestamp
     @Column(name = "create_ts", nullable = false, updatable = false)
     private LocalDateTime createDate;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "client_draw",
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "draw_id"))
+    private List<Draw> draws;
+
+    @OneToMany(mappedBy="client")
+    private List<WinPrize> prizes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

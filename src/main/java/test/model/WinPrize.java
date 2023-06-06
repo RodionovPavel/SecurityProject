@@ -10,25 +10,22 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "draw")
+@Table(name = "win_prize")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Draw {
+public class WinPrize {
 
     @Id
     @GeneratedValue
@@ -37,23 +34,22 @@ public class Draw {
     @Column(name = "title_draw", nullable = false, length = 40)
     private String title;
 
-    @Column(name = "description", nullable = false, length = 255)
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "image_preview", length = 50)
-    private String imagePreview;
+    @Column(name = "place", nullable = false)
+    private Integer place;
 
     @CreationTimestamp
     @Column(name = "create_ts", nullable = false, updatable = false)
     private LocalDateTime createDate;
 
-    @Column(name = "draw_ts", nullable = false)
-    private LocalDateTime drawDate;
+    @ManyToOne
+    @JoinColumn(name="draw_id")
+    private Draw draw;
 
-    @ManyToMany(mappedBy = "draws", fetch = FetchType.EAGER)
-    private Set<User> clients;
-
-    @OneToMany(mappedBy="draw",  fetch = FetchType.EAGER)
-    private Set<WinPrize> prizes;
+    @ManyToOne
+    @JoinColumn(name="client_id")
+    private User client;
 
 }

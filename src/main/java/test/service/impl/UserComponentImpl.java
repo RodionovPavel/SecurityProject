@@ -32,6 +32,11 @@ public class UserComponentImpl implements UserComponent {
     }
 
     @Override
+    public User update(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
     public User getUserById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new CustomException("Пользователь с id" + id + " не найден"));

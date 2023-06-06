@@ -11,6 +11,8 @@ public interface UserComponent {
 
     User create(User user);
 
+    User update(User user);
+
     User getUserById(UUID id);
 
     ClientResponse getClient();

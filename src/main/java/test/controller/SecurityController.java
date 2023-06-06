@@ -74,6 +74,4 @@ public class SecurityController {
         return ResponseEntity.ok(profileService.confirm(request.getOperationId(), request.getOtpCode()));
     }
 
-
-
 }

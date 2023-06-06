@@ -31,20 +31,20 @@ public class UserController {
     public String index() {
         return "Hello, world!!!";
     }
-
-    @PostMapping("/user")
-    public void create(@RequestBody ClientRegisterRequest registerDto) {
-        userService.create(registerDto);
-    }
-
-    @PutMapping(value = "/{id}")
-    public void updateUser(
-            @Parameter(description = "Идентификатор клиента", required = true)
-            @PathVariable UUID id,
-            @Parameter(description = "Новые данные пользователя", required = true)
-            @RequestBody ClientRegisterRequest registerDto) {
-        userService.update(id, registerDto);
-    }
+//
+//    @PostMapping("/user")
+//    public void create(@RequestBody ClientRegisterRequest registerDto) {
+//        userService.create(registerDto);
+//    }
+//
+//    @PutMapping(value = "/{id}")
+//    public void updateUser(
+//            @Parameter(description = "Идентификатор клиента", required = true)
+//            @PathVariable UUID id,
+//            @Parameter(description = "Новые данные пользователя", required = true)
+//            @RequestBody ClientRegisterRequest registerDto) {
+//        userService.update(id, registerDto);
+//    }
 
     @SecurityRequirement(name = "JWT")
     @GetMapping(value = "/api/v1/client")
@@ -52,19 +52,19 @@ public class UserController {
         return ResponseEntity.ok(userComponent.getClient());
     }
 
-    @SecurityRequirement(name = "JWT")
-    public void deleteById(@PathVariable UUID id) {
-        userComponent.deleteById(id);
-    }
-
-    @GetMapping("/list")
-    public List<User> readAll() {
-        return userComponent.readAll();
-    }
-
-    @GetMapping("/admin/size")
-    public long size() {
-        return userComponent.size();
-    }
+//    @SecurityRequirement(name = "JWT")
+//    public void deleteById(@PathVariable UUID id) {
+//        userComponent.deleteById(id);
+//    }
+//
+//    @GetMapping("/list")
+//    public List<User> readAll() {
+//        return userComponent.readAll();
+//    }
+//
+//    @GetMapping("/admin/size")
+//    public long size() {
+//        return userComponent.size();
+//    }
 
 }

@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 public class ClientOtpRequest {
+
     @NotBlank
     private String fullOperationId;
 
